@@ -16,4 +16,4 @@ The addressed disassembly covers the display routine and intro code. It is not y
 
 Run the original D64 in a PAL C64 emulator, reach this part, press SPACE, and capture the waterfall. Preserve its loader/KERNAL assumptions when building a standalone version. Keep instruction placement and timing unchanged until an unchanged build is verified.
 
-The D64 isn't included in this repository because it also contains other groups' parts. Download it from the CSDb link above and save it as `original/pardy3.d64`. Original D64 SHA-256: `cdd2305f2bfca195d565855c5840f429409c07a76bd7c7d294b990133ac40aa8`
+The D64 is not committed to this repository. Download it from the CSDb link above and save it as `original/pardy3.d64`. Original D64 SHA-256: `cdd2305f2bfca195d565855c5840f429409c07a76bd7c7d294b990133ac40aa8`
