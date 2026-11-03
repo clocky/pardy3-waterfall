@@ -17,7 +17,7 @@ make clean
 ## Layout
 
 - `original/`: the untouched source material. **Never modify these files.**
-  - `pardy3.d64`: full disk image from CSDb (release 30608). SHA-256 `cdd2305f2bfca195d565855c5840f429409c07a76bd7c7d294b990133ac40aa8`.
+  - `pardy3.d64`: the full disk image. It's **gitignored and not distributed** (`*.d64`), because the disk holds other people's parts too. If it's missing locally, download it from CSDb (link in the README; release 30608) and check SHA-256 `cdd2305f2bfca195d565855c5840f429409c07a76bd7c7d294b990133ac40aa8`.
   - `11-chris-flimbo.prg`: the disk file `11.CHRIS..FLIMBO`, extracted by following its sector chain. Its PRG header says load address `$2800`, with a BASIC stub `SYS 2061` (`$080D`). It's a packed program meant to run after relocation to `$0801`.
 - `recovered/`: analysis output.
   - `unpacked-analysis-ram.bin`: a 64 KiB flat dump of C64 RAM, taken after running the depacker in py65. Execution stopped at `$044A`, just before `CLI` / `JMP $3620`. File offset = C64 address. Some leftover packed bytes are still in it. It's **not** a VICE snapshot and **not** a runnable PRG.
