@@ -1,0 +1,314 @@
+; Recovered from Pardy 3 / 11.CHRIS..FLIMBO
+; Addressed disassembly listing, not yet a complete rebuildable project.
+; RAM obtained by executing the 6502 depacker with py65, stopping before CLI at $044a.
+; Hardware raster timing has not been tested in a full C64 emulator.
+
+
+; Effect initialization; installs raster IRQ at $2033 and NMI vector $9000.
+2000  20 81 FF   JSR $ff81
+2003  20 48 10   JSR $1048
+2006  A9 96      LDA #$96
+2008  8D 00 DD   STA $dd00
+200B  A9 00      LDA #$00
+200D  8D 18 03   STA $0318
+2010  8D 20 D0   STA $d020
+2013  8D 21 D0   STA $d021
+2016  A9 90      LDA #$90
+2018  8D 19 03   STA $0319
+201B  78         SEI
+201C  A9 33      LDA #$33
+201E  A0 20      LDY #$20
+2020  8D 14 03   STA $0314
+2023  8C 15 03   STY $0315
+2026  A2 00      LDX #$00
+2028  8E 0E DC   STX $dc0e
+202B  E8         INX
+202C  8E 1A D0   STX $d01a
+202F  58         CLI
+2030  4C 30 20   JMP $2030
+
+; Raster IRQ begins.
+2033  EE 19 D0   INC $d019
+2036  A9 38      LDA #$38
+2038  8D 11 D0   STA $d011
+203B  A9 C8      LDA #$c8
+203D  8D 16 D0   STA $d016
+2040  A9 96      LDA #$96
+2042  8D 00 DD   STA $dd00
+2045  A2 0B      LDX #$0b
+2047  CA         DEX
+2048  D0 FD      BNE $2047
+204A  24 EA      BIT $ea
+204C  A2 00      LDX #$00
+204E  A9 96      LDA #$96
+2050  8D 00 DD   STA $dd00
+2053  A0 00      LDY #$00
+
+; Timing-sensitive FLI loop: screen pointer lookup, repeated Y-scroll changes.
+2055  BD 00 2B   LDA $2b00,X
+2058  8D 18 D0   STA $d018
+205B  A9 38      LDA #$38
+205D  8D 11 D0   STA $d011
+2060  BD 01 2B   LDA $2b01,X
+2063  8D 18 D0   STA $d018
+2066  E8         INX
+2067  E8         INX
+2068  C8         INY
+
+; Force successive badlines by incrementing VIC-II Y-scroll bits.
+2069  EE 11 D0   INC $d011
+206C  BD 00 2B   LDA $2b00,X
+206F  8D 18 D0   STA $d018
+2072  E8         INX
+2073  EE 11 D0   INC $d011
+2076  BD 00 2B   LDA $2b00,X
+2079  8D 18 D0   STA $d018
+207C  E8         INX
+207D  EA         NOP
+207E  EE 11 D0   INC $d011
+2081  BD 00 2B   LDA $2b00,X
+2084  8D 18 D0   STA $d018
+2087  E8         INX
+2088  EA         NOP
+2089  EA         NOP
+208A  EE 11 D0   INC $d011
+208D  BD 00 2B   LDA $2b00,X
+2090  8D 18 D0   STA $d018
+2093  E8         INX
+2094  EA         NOP
+2095  2C EA EA   BIT $eaea
+2098  EE 11 D0   INC $d011
+209B  BD 00 2B   LDA $2b00,X
+209E  8D 18 D0   STA $d018
+20A1  E8         INX
+20A2  EA         NOP
+20A3  2C EA EA   BIT $eaea
+20A6  EE 11 D0   INC $d011
+20A9  BD 00 2B   LDA $2b00,X
+20AC  8D 18 D0   STA $d018
+20AF  E8         INX
+20B0  EA         NOP
+20B1  24 EA      BIT $ea
+20B3  EE 11 D0   INC $d011
+20B6  C8         INY
+20B7  C0 30      CPY #$30
+
+; Repeat until Y reaches $30; loop increments Y twice per eight-line group.
+20B9  D0 9A      BNE $2055
+20BB  A2 07      LDX #$07
+20BD  CA         DEX
+20BE  D0 FD      BNE $20bd
+20C0  A9 00      LDA #$00
+20C2  A2 00      LDX #$00
+20C4  A0 00      LDY #$00
+20C6  8D 21 D0   STA $d021
+20C9  8E 22 D0   STX $d022
+20CC  8C 23 D0   STY $d023
+20CF  A9 F0      LDA #$f0
+20D1  8D 18 D0   STA $d018
+20D4  20 C1 21   JSR $21c1
+20D7  20 E6 20   JSR $20e6
+20DA  20 21 10   JSR $1021
+20DD  A9 2E      LDA #$2e
+20DF  A2 33      LDX #$33
+20E1  A0 20      LDY #$20
+20E3  4C 2C 22   JMP $222c
+
+; Updates 40 columns across screen-memory pages, using colour table.
+20E6  A0 00      LDY #$00
+20E8  BE 0A 28   LDX $280a,Y
+20EB  BD 3C 29   LDA $293c,X
+20EE  99 00 44   STA $4400,Y
+20F1  BD 3D 29   LDA $293d,X
+20F4  99 00 48   STA $4800,Y
+20F7  BD 3E 29   LDA $293e,X
+20FA  99 00 4C   STA $4c00,Y
+20FD  BD 3F 29   LDA $293f,X
+2100  99 00 50   STA $5000,Y
+2103  BD 40 29   LDA $2940,X
+2106  99 00 54   STA $5400,Y
+2109  BD 41 29   LDA $2941,X
+210C  99 00 58   STA $5800,Y
+210F  BD 42 29   LDA $2942,X
+2112  99 00 5C   STA $5c00,Y
+2115  BD 43 29   LDA $2943,X
+2118  99 00 60   STA $6000,Y
+211B  BD 44 29   LDA $2944,X
+211E  99 00 64   STA $6400,Y
+2121  BD 45 29   LDA $2945,X
+2124  99 00 68   STA $6800,Y
+2127  BD 46 29   LDA $2946,X
+212A  99 00 6C   STA $6c00,Y
+212D  BD 47 29   LDA $2947,X
+2130  99 00 70   STA $7000,Y
+2133  BD 48 29   LDA $2948,X
+2136  99 00 74   STA $7400,Y
+2139  BD 49 29   LDA $2949,X
+213C  99 00 78   STA $7800,Y
+213F  C8         INY
+2140  C0 28      CPY #$28
+2142  D0 A4      BNE $20e8
+
+; Self-modification: increments low bytes of destination operands.
+2144  EE EC 20   INC $20ec
+2147  EE F2 20   INC $20f2
+214A  EE F8 20   INC $20f8
+214D  EE FE 20   INC $20fe
+2150  EE 04 21   INC $2104
+2153  EE 0A 21   INC $210a
+2156  EE 10 21   INC $2110
+2159  EE 16 21   INC $2116
+215C  EE 1C 21   INC $211c
+215F  EE 22 21   INC $2122
+2162  EE 28 21   INC $2128
+2165  EE 2E 21   INC $212e
+2168  EE 34 21   INC $2134
+216B  EE 3A 21   INC $213a
+216E  AD EC 20   LDA $20ec
+2171  C9 80      CMP #$80
+2173  F0 12      BEQ $2187
+2175  A2 24      LDX #$24
+2177  BD 00 0D   LDA $0d00,X
+217A  18         CLC
+217B  8D C2 21   STA $21c2
+217E  E8         INX
+217F  D0 02      BNE $2183
+2181  A2 00      LDX #$00
+2183  8E 76 21   STX $2176
+2186  60         RTS
+2187  A2 00      LDX #$00
+2189  8E EC 20   STX $20ec
+218C  E8         INX
+218D  8E F2 20   STX $20f2
+2190  E8         INX
+2191  8E F8 20   STX $20f8
+2194  E8         INX
+2195  8E FE 20   STX $20fe
+2198  E8         INX
+2199  8E 04 21   STX $2104
+219C  E8         INX
+219D  8E 0A 21   STX $210a
+21A0  E8         INX
+21A1  8E 10 21   STX $2110
+21A4  E8         INX
+21A5  8E 16 21   STX $2116
+21A8  E8         INX
+21A9  8E 1C 21   STX $211c
+21AC  E8         INX
+21AD  8E 22 21   STX $2122
+21B0  E8         INX
+21B1  8E 28 21   STX $2128
+21B4  E8         INX
+21B5  8E 2E 21   STX $212e
+21B8  E8         INX
+21B9  8E 34 21   STX $2134
+21BC  E8         INX
+21BD  8E 3A 21   STX $213a
+21C0  60         RTS
+
+; Builds/modifies screen-pointer table using wave table at $2c00.
+21C1  A2 B0      LDX #$b0
+21C3  BC 08 2C   LDY $2c08,X
+21C6  A9 10      LDA #$10
+21C8  99 88 2B   STA $2b88,Y
+21CB  BC 10 2C   LDY $2c10,X
+21CE  A9 20      LDA #$20
+21D0  99 80 2B   STA $2b80,Y
+21D3  BC 18 2C   LDY $2c18,X
+21D6  A9 30      LDA #$30
+21D8  99 78 2B   STA $2b78,Y
+21DB  BC 20 2C   LDY $2c20,X
+21DE  A9 40      LDA #$40
+21E0  99 70 2B   STA $2b70,Y
+21E3  BC 28 2C   LDY $2c28,X
+21E6  A9 50      LDA #$50
+21E8  99 68 2B   STA $2b68,Y
+21EB  BC 30 2C   LDY $2c30,X
+21EE  A9 60      LDA #$60
+21F0  99 50 2B   STA $2b50,Y
+21F3  BC 38 2C   LDY $2c38,X
+21F6  A9 70      LDA #$70
+21F8  99 48 2B   STA $2b48,Y
+21FB  BC 40 2C   LDY $2c40,X
+21FE  A9 80      LDA #$80
+2200  99 30 2B   STA $2b30,Y
+2203  BC 48 2C   LDY $2c48,X
+2206  A9 90      LDA #$90
+2208  99 28 2B   STA $2b28,Y
+220B  BC 50 2C   LDY $2c50,X
+220E  A9 A0      LDA #$a0
+2210  99 20 2B   STA $2b20,Y
+2213  BC 58 2C   LDY $2c58,X
+2216  A9 B0      LDA #$b0
+2218  99 10 2B   STA $2b10,Y
+221B  BC 60 2C   LDY $2c60,X
+221E  A9 C0      LDA #$c0
+2220  99 08 2B   STA $2b08,Y
+2223  BC 68 2C   LDY $2c68,X
+2226  A9 D0      LDA #$d0
+2228  99 00 2B   STA $2b00,Y
+222B  60         RTS
+
+; Sets next raster IRQ line and vector; returns through KERNAL.
+222C  8D 12 D0   STA $d012
+222F  8E 14 03   STX $0314
+2232  8C 15 03   STY $0315
+2235  4C 81 EA   JMP $ea81
+
+; Displays introductory credit screen; waits for SPACE.
+3500  78         SEI
+3501  A9 1C      LDA #$1c
+3503  8D 18 D0   STA $d018
+3506  A2 00      LDX #$00
+3508  BD 00 32   LDA $3200,X
+350B  9D 00 04   STA $0400,X
+350E  BD 00 33   LDA $3300,X
+3511  9D 00 05   STA $0500,X
+3514  BD 00 34   LDA $3400,X
+3517  9D 00 06   STA $0600,X
+351A  A9 20      LDA #$20
+351C  9D 00 07   STA $0700,X
+351F  A9 00      LDA #$00
+3521  9D 00 D8   STA $d800,X
+3524  9D 00 D9   STA $d900,X
+3527  9D 00 DA   STA $da00,X
+352A  9D 00 DB   STA $db00,X
+352D  E8         INX
+352E  D0 D8      BNE $3508
+3530  A9 00      LDA #$00
+3532  8D 20 D0   STA $d020
+3535  8D 21 D0   STA $d021
+3538  78         SEI
+3539  A9 FB      LDA #$fb
+353B  CD 12 D0   CMP $d012
+353E  D0 FB      BNE $353b
+3540  A2 28      LDX #$28
+3542  BD 80 35   LDA $3580,X
+3545  8D 21 D0   STA $d021
+3548  EE 41 35   INC $3541
+354B  AD 41 35   LDA $3541
+354E  C9 28      CMP #$28
+3550  D0 E7      BNE $3539
+3552  AD 01 DC   LDA $dc01
+3555  C9 EF      CMP #$ef
+3557  D0 F9      BNE $3552
+3559  A9 FB      LDA #$fb
+355B  CD 12 D0   CMP $d012
+355E  D0 FB      BNE $355b
+3560  A2 28      LDX #$28
+3562  BD C0 35   LDA $35c0,X
+3565  8D 21 D0   STA $d021
+3568  EE 61 35   INC $3561
+356B  AD 61 35   LDA $3561
+356E  C9 28      CMP #$28
+3570  D0 E7      BNE $3559
+3572  58         CLI
+3573  20 18 E5   JSR $e518
+3576  20 02 FD   JSR $fd02
+3579  4C 00 20   JMP $2000
+
+; Entry point reached after decompression.
+3620  A2 00      LDX #$00
+3622  8E 41 35   STX $3541
+3625  8E 61 35   STX $3561
+3628  4C 00 35   JMP $3500
