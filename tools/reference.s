@@ -1,4 +1,5 @@
-; Pardy 3 FLI waterfall - standalone unpacked PRG (64tass)
+; Pardy 3 FLI waterfall - REFERENCE build (64tass, not Turbo Assembler syntax)
+; `make verify` checks that src/waterfall.s assembles to exactly this.
 ; Code/graphics: Flimbo/Xentrix, music: Chris/Xentrix, 1990.
 ;
 ; Wraps the depacked RAM image from recovered/unpacked-analysis-ram.bin
@@ -6,7 +7,7 @@
 ; ($01=$37, CLI, JMP $3620). The effect code itself is not yet
 ; reassembled from source; it is included byte-for-byte from the dump.
 
-DUMP = "../recovered/unpacked-analysis-ram.bin"
+DUMP = "../recovered/unpacked-analysis-ram.bin"   ; relative to tools/
 
         * = $0801
         .word basend, 1990

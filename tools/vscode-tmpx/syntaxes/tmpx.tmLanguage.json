@@ -1,0 +1,90 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Turbo Macro Pro / TMPx",
+  "scopeName": "source.tmpx",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#label-definition" },
+    { "include": "#statement" }
+  ],
+  "repository": {
+    "comment": {
+      "match": ";.*$",
+      "name": "comment.line.semicolon.tmpx"
+    },
+    "label-definition": {
+      "comment": "Labels start in column 1, no colon",
+      "match": "^([A-Za-z_][A-Za-z0-9_]*)",
+      "captures": {
+        "1": { "name": "entity.name.function.label.tmpx" }
+      }
+    },
+    "statement": {
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#string" },
+        { "include": "#pc-assign" },
+        { "include": "#pseudo-op" },
+        { "include": "#mnemonic" },
+        { "include": "#illegal-mnemonic" },
+        { "include": "#macro-call" },
+        { "include": "#index-register" },
+        { "include": "#number" },
+        { "include": "#operator" },
+        { "include": "#identifier" }
+      ]
+    },
+    "string": {
+      "begin": "\"",
+      "end": "\"|$",
+      "name": "string.quoted.double.tmpx",
+      "patterns": [
+        { "match": "\\{[^}]*\\}", "name": "constant.character.escape.petscii.tmpx" }
+      ]
+    },
+    "pc-assign": {
+      "match": "(?<=\\s|^)\\*\\s*=",
+      "name": "keyword.control.directive.origin.tmpx"
+    },
+    "pseudo-op": {
+      "match": "(?i)(?<![A-Za-z0-9_])\\.(byte|word|rta|text|null|shift|screen|repeat|include|binary|offs|block|bend|ifne|ifeq|ifpl|ifmi|ifdef|ifndef|if|endif|var|lbl|goto|macro|segment|endm|pron|proff|hidemac|showmac|eor|end)\\b",
+      "name": "keyword.control.directive.tmpx"
+    },
+    "mnemonic": {
+      "match": "(?i)\\b(adc|and|asl|bcc|bcs|beq|bit|bmi|bne|bpl|brk|bvc|bvs|clc|cld|cli|clv|cmp|cpx|cpy|dec|dex|dey|eor|inc|inx|iny|jmp|jsr|lda|ldx|ldy|lsr|nop|ora|pha|php|pla|plp|rol|ror|rti|rts|sbc|sec|sed|sei|sta|stx|sty|tax|tay|tsx|txa|txs|tya)\\b",
+      "name": "keyword.mnemonic.6502.tmpx"
+    },
+    "illegal-mnemonic": {
+      "match": "(?i)\\b(slo|rla|sre|rra|sax|lax|dcp|isb|anc|alr|arr|axs|sbx|ane|lxa|las|shy|shx|sha|tas|jam)\\b",
+      "name": "keyword.mnemonic.6502.undocumented.tmpx"
+    },
+    "macro-call": {
+      "match": "#([A-Za-z_][A-Za-z0-9_]*)(?=\\s|$)",
+      "captures": {
+        "1": { "name": "entity.name.function.macro.tmpx" }
+      }
+    },
+    "index-register": {
+      "match": "(?i),\\s*(x|y)\\b",
+      "captures": {
+        "1": { "name": "variable.language.register.tmpx" }
+      }
+    },
+    "number": {
+      "patterns": [
+        { "match": "\\$[0-9A-Fa-f]+", "name": "constant.numeric.hex.tmpx" },
+        { "match": "%[01]+", "name": "constant.numeric.binary.tmpx" },
+        { "match": "\\b\\d+\\b", "name": "constant.numeric.decimal.tmpx" },
+        { "match": "'.'", "name": "constant.character.tmpx" }
+      ]
+    },
+    "operator": {
+      "match": "[#<>!+\\-*/&.:=]",
+      "name": "keyword.operator.tmpx"
+    },
+    "identifier": {
+      "match": "[A-Za-z_][A-Za-z0-9_]*",
+      "name": "variable.other.label.tmpx"
+    }
+  }
+}

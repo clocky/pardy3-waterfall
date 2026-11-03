@@ -1,0 +1,210 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "detail": "make: assemble src/waterfall.s to build/waterfall.prg (TMPx, or 64tass -T)",
+      "type": "shell",
+      "command": "make",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        {
+          "owner": "tmpx",
+          "source": "tmpx",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}/src"
+          ],
+          "pattern": {
+            "regexp": "^(.+?)\\((\\d+)\\) : (error|warning) (\\d+): (.*)$",
+            "file": 1,
+            "line": 2,
+            "severity": 3,
+            "code": 4,
+            "message": 5
+          }
+        },
+        {
+          "owner": "64tass",
+          "source": "64tass",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}"
+          ],
+          "pattern": {
+            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|note): (.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        }
+      ]
+    },
+    {
+      "label": "Verify (byte-identical)",
+      "detail": "make verify: both assemblers must match the reference image",
+      "type": "shell",
+      "command": "make verify",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        {
+          "owner": "tmpx",
+          "source": "tmpx",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}/src"
+          ],
+          "pattern": {
+            "regexp": "^(.+?)\\((\\d+)\\) : (error|warning) (\\d+): (.*)$",
+            "file": 1,
+            "line": 2,
+            "severity": 3,
+            "code": 4,
+            "message": 5
+          }
+        },
+        {
+          "owner": "64tass",
+          "source": "64tass",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}"
+          ],
+          "pattern": {
+            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|note): (.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        }
+      ]
+    },
+    {
+      "label": "Run in VICE",
+      "detail": "make run: x64sc PAL; SPACE starts the effect, RESTORE exits",
+      "type": "shell",
+      "command": "make run",
+      "isBackground": false,
+      "presentation": {
+        "reveal": "silent"
+      },
+      "problemMatcher": [
+        {
+          "owner": "tmpx",
+          "source": "tmpx",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}/src"
+          ],
+          "pattern": {
+            "regexp": "^(.+?)\\((\\d+)\\) : (error|warning) (\\d+): (.*)$",
+            "file": 1,
+            "line": 2,
+            "severity": 3,
+            "code": 4,
+            "message": 5
+          }
+        },
+        {
+          "owner": "64tass",
+          "source": "64tass",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}"
+          ],
+          "pattern": {
+            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|note): (.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        }
+      ]
+    },
+    {
+      "label": "Debug in VICE (labels loaded)",
+      "detail": "make debug: Cmd+Esc opens the monitor with source labels",
+      "type": "shell",
+      "command": "make debug",
+      "isBackground": false,
+      "presentation": {
+        "reveal": "silent"
+      },
+      "problemMatcher": [
+        {
+          "owner": "tmpx",
+          "source": "tmpx",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}/src"
+          ],
+          "pattern": {
+            "regexp": "^(.+?)\\((\\d+)\\) : (error|warning) (\\d+): (.*)$",
+            "file": 1,
+            "line": 2,
+            "severity": 3,
+            "code": 4,
+            "message": 5
+          }
+        },
+        {
+          "owner": "64tass",
+          "source": "64tass",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}"
+          ],
+          "pattern": {
+            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|note): (.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        }
+      ]
+    },
+    {
+      "label": "Run original (packed) in VICE",
+      "type": "shell",
+      "command": "make run-original",
+      "presentation": {
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "Capture screenshots (headless)",
+      "detail": "make capture: writes build/capture/fli1.png and fli2.png",
+      "type": "shell",
+      "command": "make capture"
+    },
+    {
+      "label": "Fetch TMPx",
+      "type": "shell",
+      "command": "make tools"
+    },
+    {
+      "label": "Install TMPx syntax extension",
+      "type": "shell",
+      "command": "make vscode"
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "make clean"
+    }
+  ]
+}

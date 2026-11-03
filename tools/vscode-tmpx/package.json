@@ -1,0 +1,37 @@
+{
+  "name": "tmpx-syntax",
+  "displayName": "Turbo Macro Pro / TMPx syntax",
+  "description": "Syntax highlighting for Turbo Assembler / Turbo Macro Pro / TMPx 6502 source (pardy3-waterfall project).",
+  "publisher": "pardy3-waterfall",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clocky/pardy3-waterfall"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tmpx",
+        "aliases": [
+          "Turbo Macro Pro",
+          "TMPx"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tmpx",
+        "scopeName": "source.tmpx",
+        "path": "./syntaxes/tmpx.tmLanguage.json"
+      }
+    ]
+  }
+}

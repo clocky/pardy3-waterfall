@@ -1,0 +1,30 @@
+{
+  "files.associations": {
+    "*.s": "tmpx"
+  },
+  "[tmpx]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 9,
+    "editor.detectIndentation": false,
+    "editor.rulers": [
+      9,
+      32,
+      40
+    ],
+    "editor.wordWrap": "off",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true
+  },
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/__pycache__": true
+  },
+  "search.exclude": {
+    "build/**": true,
+    ".tools/**": true,
+    ".venv/**": true,
+    "recovered/*.bin": true,
+    "original/*.d64": true
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
+}
