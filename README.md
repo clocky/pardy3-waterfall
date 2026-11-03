@@ -10,7 +10,7 @@ Downloaded from https://csdb.dk/getinternalfile.php/19472/Xentrix%20-%20Pardey%2
 
 Parsed the D64 directory and followed each file's sector chain. The target is stored with load address $2800 but contains a packed program designed to execute after relocation to $0801. For analysis, its payload was placed at $0801 and the depacker executed from $080D using py65's 6502 interpreter. Execution stopped before CLI at $044A, immediately before JMP $3620. The included 64 KiB dump includes decompressed data and leftover packed bytes; it is an analysis snapshot, NOT a VICE snapshot or standalone runnable PRG.
 
-The addressed disassembly covers the display routine and intro code. It is not yet a complete reassemblable source recovery. The effect's identity and authorship are explicit in the binary. No live visual playback or cycle-accurate timing verification has been completed. REA's advertised binary formats do not cover D64/6510; this recovery used a format-specific disk parser and 6502 interpreter instead.
+The addressed disassembly covers the display routine and intro code. It is not yet a complete reassemblable source recovery. The effect's identity and authorship are explicit in the binary. Update (2026-11-03): both the original packed part and a standalone build (`make`, then `make run`) play the waterfall in VICE x64sc (PAL). Their screenshots are byte-identical. It has not been tested on real hardware. REA's advertised binary formats do not cover D64/6510; this recovery used a format-specific disk parser and 6502 interpreter instead.
 
 ## Next recovery step
 
